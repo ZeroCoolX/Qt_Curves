@@ -34,8 +34,12 @@ public slots:
 
 private:
     void on_shape_changed();
-    void compute_astroid(QPainter *painter);
-    QPointF compute_arc_length(float t);
+    void draw_shape(QPainter *painter);
+    QPointF compute_curve(float theta);       // dispatch function based on _shape's type
+    QPointF compute_astroid(float theta);
+    QPointF compute_cycloid(float theta);
+    QPointF compute_huygens(float theta);
+    QPointF compute_hypo(float theta);
 
 private:
     QColor _backgroundColor;

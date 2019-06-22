@@ -26,21 +26,45 @@ void RenderArea::on_shape_changed(){
         _scale = 40.f;
         _intervalLength = 2.f * M_PI;
         _stepCount = 256;
+        this->setBackgroundColor(Qt::red);
         break;
     case Cycloid:
+        this->setBackgroundColor(Qt::green);
         break;
     case HuygensCycloid:
+        this->setBackgroundColor(Qt::blue);
         break;
     case HypoCycloid:
+        this->setBackgroundColor(Qt::yellow);
         break;
     default:
         break;
     }
 }
 
+QPointF RenderArea::compute_curve(float theta){
+    switch(_shape){
+    case Astroid:
+        return compute_astroid(theta);
+        break;
+    case Cycloid:
+        return compute_cycloid(theta);
+        break;
+    case HuygensCycloid:
+        return compute_huygens(theta);
+        break;
+    case HypoCycloid:
+        return compute_hypo(theta);
+        break;
+    default:
+        break;
+    }
+    return QPointF(0, 0);
+}
+
 // x(theta) = aCos^3(theta)
 // y(theta) = aSin^3(theta)
-QPointF RenderArea::compute_arc_length(float theta){
+QPointF RenderArea::compute_astroid(float theta){
     auto cosCurve = cos(theta);
     auto sinCurve = sin(theta);
 
@@ -50,18 +74,27 @@ QPointF RenderArea::compute_arc_length(float theta){
     return QPointF(xCoord, yCoord);
 }
 
-void RenderArea::compute_astroid(QPainter *painter){
+QPointF RenderArea::compute_cycloid(float theta){
+}
+
+QPointF RenderArea::compute_huygens(float theta){
+}
+
+QPointF RenderArea::compute_hypo(float theta){
+}
+
+void RenderArea::draw_shape(QPainter *painter){
     QPoint center {this->rect().center()};
     auto step {_intervalLength / _stepCount};
 
-    // generating a curve function
     for(auto theta{0.f}; theta < _intervalLength; theta += step){
-        QPointF point = compute_arc_length(theta);
-
+        // compute shape's curve
+        QPointF point = compute_curve(theta);
+        // calculate individual point
         QPoint pixel;
         pixel.setX(static_cast<int>(point.x() * _scale + center.x()));
         pixel.setY(static_cast<int>(point.y() * _scale + center.y()));
-
+        // draw point
         painter->drawPoint(pixel);
     }
 }
@@ -82,6 +115,5 @@ void RenderArea::paintEvent(QPaintEvent *event){
 
     // Drawing area
     painter.drawRect(this->rect());
-    this->compute_astroid(&painter);
-
+    this->draw_shape(&painter);
 }
