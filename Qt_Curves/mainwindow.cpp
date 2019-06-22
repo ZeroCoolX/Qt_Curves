@@ -15,27 +15,25 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btnAsteroid_clicked()
 {
-    this->changeRenderColor(Qt::red);
+    this->ui->renderArea->setShape(RenderArea::Asteroid);
+    this->ui->renderArea->repaint();
 }
 
 void MainWindow::on_btnCycloid_clicked()
 {
-    this->changeRenderColor(Qt::green);
+    this->ui->renderArea->setShape(RenderArea::Cycloid);
+    this->ui->renderArea->repaint();
 }
 
 void MainWindow::on_btnHuygens_clicked()
 {
-    this->changeRenderColor(Qt::blue);
+    this->ui->renderArea->setShape(RenderArea::HuygensCycloid);
+    this->ui->renderArea->repaint();
 }
 
 void MainWindow::on_btnHypoCycloid_clicked()
 {
-    this->changeRenderColor(Qt::yellow);
-}
-
-void MainWindow::changeRenderColor(QColor color){
-    // change background color for render area
-    ui->renderArea->setBackgroundColor(color);
+    this->ui->renderArea->setShape(RenderArea::HypoCycloid);
     this->ui->renderArea->repaint();
 }
 

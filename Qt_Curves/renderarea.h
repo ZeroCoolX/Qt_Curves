@@ -14,10 +14,15 @@ public:
     QSize minimumSizeHint() const Q_DECL_OVERRIDE;
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
-    enum Shapes {Asteroid, Cycloid, HuygensCycloid, HypoCycloid};
+    enum ShapeType {Asteroid, Cycloid, HuygensCycloid, HypoCycloid};
 
-    void setBackgroundColor(QColor color){background_color = color;}
-    QColor getBackgroundColor() const {return background_color;}
+    // Background color accessors
+    void setBackgroundColor(QColor color){this->background_color = color;}
+    QColor getBackgroundColor() const {return this->background_color;}
+
+    // Shape accessfors
+    void setShape(ShapeType shape){this->shape = shape;}
+    ShapeType getShape() const {return this->shape;}
 
 protected:
     // Override so we can control the paint
@@ -30,6 +35,7 @@ public slots:
 private:
     QColor background_color;
     QColor shape_color;
+    ShapeType shape;
 
 };
 

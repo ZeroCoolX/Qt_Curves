@@ -26,8 +26,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-
-    void changeRenderColor(QColor color);
 };
 
 #endif // MAINWINDOW_H
