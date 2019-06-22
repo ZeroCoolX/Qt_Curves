@@ -14,11 +14,11 @@ public:
     QSize minimumSizeHint() const Q_DECL_OVERRIDE;
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
-    enum ShapeType {Asteroid, Cycloid, HuygensCycloid, HypoCycloid};
+    enum ShapeType {Astroid, Cycloid, HuygensCycloid, HypoCycloid};
 
     // Background color accessors
-    void setBackgroundColor(QColor color){this->background_color = color;}
-    QColor getBackgroundColor() const {return this->background_color;}
+    void setBackgroundColor(QColor color){this->backgroundColor = color;}
+    QColor getBackgroundColor() const {return this->backgroundColor;}
 
     // Shape accessfors
     void setShape(ShapeType shape){this->shape = shape;}
@@ -33,8 +33,12 @@ signals:
 public slots:
 
 private:
-    QColor background_color;
-    QColor shape_color;
+    void compute_astroid(QPainter *painter);
+    QPointF compute_arc_length(float t);
+
+private:
+    QColor backgroundColor;
+    QColor shapeColor;
     ShapeType shape;
 
 };

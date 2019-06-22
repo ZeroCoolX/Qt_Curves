@@ -16,7 +16,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_btnAsteroid_clicked();
+    void on_btnAstroid_clicked();
 
     void on_btnCycloid_clicked();
 

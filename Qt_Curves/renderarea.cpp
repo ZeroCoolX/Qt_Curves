@@ -1,12 +1,13 @@
 #include "renderarea.h"
 #include <QPainter>
 #include <QPaintEvent>
+#include "math.h"
 
 RenderArea::RenderArea(QWidget *parent) :
     QWidget(parent),
-    background_color(Qt::blue),
-    shape_color(Qt::white),
-    shape(Asteroid)
+    backgroundColor(Qt::blue),
+    shapeColor(Qt::white),
+    shape(Astroid)
 {
 
 }
@@ -19,9 +20,40 @@ QSize RenderArea::sizeHint() const {
     return QSize(400, 200);
 }
 
+// x(theta) = aCos^3(theta)
+// y(theta) = aSin^3(theta)
+QPointF RenderArea::compute_arc_length(float theta){
+    auto cosCurve = cos(theta);
+    auto sinCurve = sin(theta);
+
+    auto xCoord = 2.f * pow(cosCurve, 3);
+    auto yCoord = 2.f * pow(sinCurve, 3);
+
+    return QPointF(xCoord, yCoord);
+}
+
+void RenderArea::compute_astroid(QPainter *painter){
+    QPoint center {this->rect().center()};
+    auto stepCount {256};
+    auto scale {40.f};
+    float intervalLength {2 * M_PI};
+    auto step {intervalLength / stepCount};
+
+    // generating a curve function
+    for(auto theta{0.f}; theta < intervalLength; theta += step){
+        QPointF point = compute_arc_length(theta);
+
+        QPoint pixel;
+        pixel.setX(static_cast<int>(point.x() * scale + center.x()));
+        pixel.setY(static_cast<int>(point.y() * scale + center.y()));
+
+        painter->drawPoint(pixel);
+    }
+}
+
 // Gets called every frame
 void RenderArea::paintEvent(QPaintEvent *event){
-    // silence unuse warning
+    // silence unused warning
     Q_UNUSED(event);
 
     QPainter painter(this);
@@ -30,27 +62,27 @@ void RenderArea::paintEvent(QPaintEvent *event){
 
     // Change background render color
     switch(shape){
-    case Asteroid:
-        background_color = Qt::red;
+    case Astroid:
+        backgroundColor = Qt::red;
         break;
     case Cycloid:
-        background_color = Qt::green;
+        backgroundColor = Qt::green;
         break;
     case HuygensCycloid:
-        background_color = Qt::blue;
+        backgroundColor = Qt::blue;
         break;
     case HypoCycloid:
-        background_color = Qt::yellow;
+        backgroundColor = Qt::yellow;
         break;
     default:
-        background_color = Qt::blue;
+        backgroundColor = Qt::blue;
         break;
     }
-    painter.setBrush(background_color);
-    painter.setPen(shape_color);
+    painter.setBrush(backgroundColor);
+    painter.setPen(shapeColor);
 
-    // Bounding rectangle for this widget's drawing area
+    // Drawing area
     painter.drawRect(this->rect());
-    // Draw diagonal line
-    painter.drawLine(this->rect().topLeft(), this->rect().bottomRight());
+    this->compute_astroid(&painter);
+
 }

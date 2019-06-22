@@ -13,9 +13,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_btnAsteroid_clicked()
+void MainWindow::on_btnAstroid_clicked()
 {
-    this->ui->renderArea->setShape(RenderArea::Asteroid);
+    this->ui->renderArea->setShape(RenderArea::Astroid);
     this->ui->renderArea->repaint();
 }
 
