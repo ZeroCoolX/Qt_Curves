@@ -15,8 +15,19 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_btnAsteroid_clicked();
+
+    void on_btnCycloid_clicked();
+
+    void on_btnHuygens_clicked();
+
+    void on_btnHypoCycloid_clicked();
+
 private:
     Ui::MainWindow *ui;
+
+    void changeRenderColor(QColor color);
 };
 
 #endif // MAINWINDOW_H

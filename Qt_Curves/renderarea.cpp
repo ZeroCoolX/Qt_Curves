@@ -4,8 +4,8 @@
 
 RenderArea::RenderArea(QWidget *parent) :
     QWidget(parent),
-    background_color(QColor(0,0,255)),
-    shape_color(QColor(255,255,255))
+    background_color(Qt::blue),
+    shape_color(Qt::white)
 {
 
 }
@@ -18,6 +18,7 @@ QSize RenderArea::sizeHint() const {
     return QSize(400, 200);
 }
 
+// Gets called every frame
 void RenderArea::paintEvent(QPaintEvent *event){
     QPainter painter(this);
     // Assign the draw color

@@ -14,8 +14,13 @@ public:
     QSize minimumSizeHint() const Q_DECL_OVERRIDE;
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
-    // Override so we can control the paint
+    enum Shapes {Asteroid, Cycloid, HuygensCycloid, HypoCycloid};
+
+    void setBackgroundColor(QColor color){background_color = color;}
+    QColor getBackgroundColor() const {return background_color;}
+
 protected:
+    // Override so we can control the paint
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 signals:
