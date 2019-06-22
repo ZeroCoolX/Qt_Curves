@@ -20,9 +20,18 @@ public:
     void setBackgroundColor(QColor color){this->_backgroundColor = color;}
     QColor getBackgroundColor() const {return this->_backgroundColor;}
 
-    // Shape accessfors
+    // Accessors
     void setShape(ShapeType shape){this->_shape = shape; this->on_shape_changed();}
     ShapeType getShape() const {return this->_shape;}
+
+    void setPixelScale(float pixelScale){this->_pixelScale = pixelScale; this->repaint();}
+    float getPixelScale() const {return this->_pixelScale;}
+
+    void setIntervalLength(float interval){this->_intervalLength = interval; this->repaint();}
+    float getIntervalLength() const {return this->_intervalLength;}
+
+    void setStepCount(int stepCount){this->_stepCount = stepCount; this->repaint();}
+    int getStepCount() const {return this->_stepCount;}
 
 protected:
     // Override so we can control the paint
