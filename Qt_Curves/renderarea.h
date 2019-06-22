@@ -22,7 +22,9 @@ public:
                     Line,
                     Circle,
                     Fancy,
-                    Starfish};
+                    Starfish,
+                    Cloud,
+                    InvertedCloud};
 
     // Background color accessors
     void setBackgroundColor(QColor color){this->_backgroundColor = color;}
@@ -64,6 +66,9 @@ private:
     QPointF compute_circle(float theta);
     QPointF compute_fancy(float theta);
     QPointF compute_starfish(float theta);
+    QPointF compute_cloud(float theta);
+    QPointF compute_inverted_cloud(float theta);
+    QPointF compute_cloud_with_sign(float theta, float sign);
 
 private:
     QColor _backgroundColor;

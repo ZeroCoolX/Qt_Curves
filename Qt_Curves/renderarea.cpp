@@ -36,7 +36,7 @@ void RenderArea::on_shape_changed(){
         this->setBackgroundColor(Qt::green);
         break;
     case HuygensCycloid:
-        _pixelScale = 15.f;
+        _pixelScale = 12.f;
         _intervalLength = 4.f * M_PI;
         _stepCount = 256;
         this->setBackgroundColor(Qt::blue);
@@ -66,6 +66,12 @@ void RenderArea::on_shape_changed(){
         _pixelScale = 25;
         _intervalLength = 6.f * M_PI;
         _stepCount = 256;
+        break;
+    case Cloud:
+    case InvertedCloud:
+        _pixelScale = 10;
+        _intervalLength = 28.f * M_PI;
+        _stepCount = 128;
         break;
     default:
         break;
@@ -97,6 +103,12 @@ QPointF RenderArea::compute_curve(float theta){
         break;
     case Starfish:
         return compute_starfish(theta);
+        break;
+    case Cloud:
+        return compute_cloud(theta);
+        break;
+    case InvertedCloud:
+        return compute_inverted_cloud(theta);
         break;
     default:
         break;
@@ -161,6 +173,24 @@ QPointF RenderArea::compute_starfish(float theta){
 
     auto xCoord = (R - radius) * cos(theta) + diameter * cos((theta * ((R - radius) / radius)));
     auto yCoord = (R - radius) * sin(theta) - diameter * sin((theta * ((R - radius) / radius)));
+
+    return QPointF(xCoord, yCoord);
+}
+
+QPointF RenderArea::compute_cloud(float theta){
+    return this->compute_cloud_with_sign(theta, -1);
+}
+
+QPointF RenderArea::compute_inverted_cloud(float theta){
+    return this->compute_cloud_with_sign(theta, 1);
+}
+
+QPointF RenderArea::compute_cloud_with_sign(float theta, float sign){
+    auto a {14.f};
+    auto b {1.f};
+
+    auto xCoord = (a + b) * cos(theta * b / a) + sign * b * cos(theta * (a + b) / a);
+    auto yCoord = (a + b) * sin(theta * b / a) - b * sin(theta * (a + b) / a);
 
     return QPointF(xCoord, yCoord);
 }

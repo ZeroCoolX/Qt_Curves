@@ -72,6 +72,18 @@ void MainWindow::on_btnStarfish_clicked()
     this->update_ui();
 }
 
+void MainWindow::on_btnCloud_clicked()
+{
+    this->ui->renderArea->setShape(RenderArea::Cloud);
+    this->update_ui();
+}
+
+void MainWindow::on_btnInvCloud_clicked()
+{
+    this->ui->renderArea->setShape(RenderArea::InvertedCloud);
+    this->update_ui();
+}
+
 void MainWindow::on_spinPixelScale_valueChanged(double pixelScale)
 {
     this->ui->renderArea->setPixelScale(pixelScale);
