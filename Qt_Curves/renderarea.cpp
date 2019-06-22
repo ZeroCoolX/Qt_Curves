@@ -23,34 +23,48 @@ QSize RenderArea::sizeHint() const {
 void RenderArea::on_shape_changed(){
     switch(_shape){
     case Astroid:
-        _pixelScale = 40.f;
+        _pixelScale = 90.f;
         _intervalLength = 2.f * M_PI;
         _stepCount = 256;
         this->setBackgroundColor(Qt::red);
         break;
     case Cycloid:
-        _pixelScale = 4;
-        _intervalLength = 6.f * M_PI;
+        _pixelScale = 10.f;
+        _intervalLength = 4.f * M_PI;
         _stepCount = 128;
         this->setBackgroundColor(Qt::green);
         break;
     case HuygensCycloid:
-        _pixelScale = 4;
+        _pixelScale = 15.f;
         _intervalLength = 4.f * M_PI;
         _stepCount = 256;
         this->setBackgroundColor(Qt::blue);
         break;
     case HypoCycloid:
-        _pixelScale = 15;
+        _pixelScale = 40;
         _intervalLength = 2.f * M_PI;
         _stepCount = 256;
         this->setBackgroundColor(QColor(102, 0, 204)); // purple
         break;
     case Line:
         _pixelScale = 100;
-        _intervalLength = 1.f;
+        _intervalLength = 2.f;
         _stepCount = 128;
-        //this->setBackgroundColor(QColor(102, 0, 204)); // purple
+        break;
+    case Circle:
+        _pixelScale = 100;
+        _intervalLength = 2.f * M_PI;
+        _stepCount = 128;
+        break;
+    case Fancy:
+        _pixelScale = 10;
+        _intervalLength = 12.f * M_PI;
+        _stepCount = 512;
+        break;
+    case Starfish:
+        _pixelScale = 25;
+        _intervalLength = 6.f * M_PI;
+        _stepCount = 256;
         break;
     default:
         break;
@@ -74,6 +88,15 @@ QPointF RenderArea::compute_curve(float theta){
     case Line:
         return compute_line(theta);
         break;
+    case Circle:
+        return compute_circle(theta);
+        break;
+    case Fancy:
+        return compute_fancy(theta);
+        break;
+    case Starfish:
+        return compute_starfish(theta);
+        break;
     default:
         break;
     }
@@ -83,11 +106,8 @@ QPointF RenderArea::compute_curve(float theta){
 
 // http://mathworld.wolfram.com/Astroid.html
 QPointF RenderArea::compute_astroid(float theta){
-    auto cosCurve = cos(theta);
-    auto sinCurve = sin(theta);
-
-    auto xCoord = 2.f * pow(cosCurve, 3);
-    auto yCoord = 2.f * pow(sinCurve, 3);
+    auto xCoord = 2.f * pow(cos(theta), 3);
+    auto yCoord = 2.f * pow(sin(theta), 3);
 
     return QPointF(xCoord, yCoord);
 }
@@ -120,6 +140,30 @@ QPointF RenderArea::compute_line(float theta){
     return QPointF(1.f - theta,1.f - theta);
 }
 
+QPointF RenderArea::compute_circle(float theta){
+    return QPointF(
+                cos(theta),
+                sin(theta)
+                );
+}
+
+QPointF RenderArea::compute_fancy(float theta){
+    auto xCoord = 11 * cos(theta) - 6 * cos((11.f / 6.f) * theta);
+    auto yCoord = 11 * sin(theta) - 6 * sin((11.f / 6.f) * theta);
+    return QPointF(xCoord, yCoord);
+}
+
+QPointF RenderArea::compute_starfish(float theta){
+    auto radius {3.f};
+    auto R{5.f};
+    auto diameter{5.f};
+
+    auto xCoord = (R - radius) * cos(theta) + diameter * cos((theta * ((R - radius) / radius)));
+    auto yCoord = (R - radius) * sin(theta) - diameter * sin((theta * ((R - radius) / radius)));
+
+    return QPointF(xCoord, yCoord);
+}
+
 void RenderArea::draw_shape(QPainter *painter){
     QPoint center {this->rect().center()};
 
@@ -146,6 +190,16 @@ void RenderArea::draw_shape(QPainter *painter){
         painter->drawLine(pixel, prevPixel);
         prevPixel = pixel;
     }
+
+    // Final draw to ensure the shape connects
+    point = compute_curve(_intervalLength);
+
+    // calculate individual point
+    pixel.setX(static_cast<int>(point.x() * _pixelScale + center.x()));
+    pixel.setY(static_cast<int>(point.y() * _pixelScale + center.y()));
+
+    // draw line from last pixel and this pixel for a consistent render
+    painter->drawLine(pixel, prevPixel);
 }
 
 // Gets called every frame

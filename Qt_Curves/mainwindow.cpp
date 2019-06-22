@@ -54,6 +54,24 @@ void MainWindow::on_btnLine_clicked()
     this->update_ui();
 }
 
+void MainWindow::on_btnCircle_clicked()
+{
+    this->ui->renderArea->setShape(RenderArea::Circle);
+    this->update_ui();
+}
+
+void MainWindow::on_btnFancy_clicked()
+{
+    this->ui->renderArea->setShape(RenderArea::Fancy);
+    this->update_ui();
+}
+
+void MainWindow::on_btnStarfish_clicked()
+{
+    this->ui->renderArea->setShape(RenderArea::Starfish);
+    this->update_ui();
+}
+
 void MainWindow::on_spinPixelScale_valueChanged(double pixelScale)
 {
     this->ui->renderArea->setPixelScale(pixelScale);
@@ -82,3 +100,4 @@ void MainWindow::on_btnLineColor_clicked()
     auto color = QColorDialog::getColor(this->ui->renderArea->getShapeColor(), this, "Select Shape Color");
     this->ui->renderArea->setShapeColor(color);
 }
+
