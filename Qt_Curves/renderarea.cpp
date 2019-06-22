@@ -29,13 +29,22 @@ void RenderArea::on_shape_changed(){
         this->setBackgroundColor(Qt::red);
         break;
     case Cycloid:
+        _scale = 4;
+        _intervalLength = 6.f * M_PI;
+        _stepCount = 128;
         this->setBackgroundColor(Qt::green);
         break;
     case HuygensCycloid:
+        _scale = 4;
+        _intervalLength = 4.f * M_PI;
+        _stepCount = 256;
         this->setBackgroundColor(Qt::blue);
         break;
     case HypoCycloid:
-        this->setBackgroundColor(Qt::yellow);
+        _scale = 15;
+        _intervalLength = 2.f * M_PI;
+        _stepCount = 256;
+        this->setBackgroundColor(QColor(102, 0, 204)); // purple
         break;
     default:
         break;
@@ -64,6 +73,7 @@ QPointF RenderArea::compute_curve(float theta){
 
 // x(theta) = aCos^3(theta)
 // y(theta) = aSin^3(theta)
+// http://mathworld.wolfram.com/Astroid.html
 QPointF RenderArea::compute_astroid(float theta){
     auto cosCurve = cos(theta);
     auto sinCurve = sin(theta);
@@ -74,13 +84,28 @@ QPointF RenderArea::compute_astroid(float theta){
     return QPointF(xCoord, yCoord);
 }
 
+// http://mathworld.wolfram.com/Cycloid.html
 QPointF RenderArea::compute_cycloid(float theta){
+    return QPointF(
+                1.5f * (1 - cos(theta)),
+                1.5f * (theta - sin(theta))
+                );
 }
 
+// ???
 QPointF RenderArea::compute_huygens(float theta){
+    return QPointF(
+                4 * (3 * cos(theta) - cos(3 * theta)),
+                4 * (3 * sin(theta) - sin(3 * theta))
+                );
 }
 
+// http://mathworld.wolfram.com/Hypocycloid.html
 QPointF RenderArea::compute_hypo(float theta){
+    return QPointF(
+                1.5f * (2 * cos(theta) + cos(2 * theta)),
+                1.5 * (2 * sin(theta) - sin(2 * theta))
+                );
 }
 
 void RenderArea::draw_shape(QPainter *painter){
