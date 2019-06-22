@@ -17,12 +17,12 @@ public:
     enum ShapeType {Astroid, Cycloid, HuygensCycloid, HypoCycloid};
 
     // Background color accessors
-    void setBackgroundColor(QColor color){this->backgroundColor = color;}
-    QColor getBackgroundColor() const {return this->backgroundColor;}
+    void setBackgroundColor(QColor color){this->_backgroundColor = color;}
+    QColor getBackgroundColor() const {return this->_backgroundColor;}
 
     // Shape accessfors
-    void setShape(ShapeType shape){this->shape = shape;}
-    ShapeType getShape() const {return this->shape;}
+    void setShape(ShapeType shape){this->_shape = shape; this->on_shape_changed();}
+    ShapeType getShape() const {return this->_shape;}
 
 protected:
     // Override so we can control the paint
@@ -33,14 +33,19 @@ signals:
 public slots:
 
 private:
+    void on_shape_changed();
     void compute_astroid(QPainter *painter);
     QPointF compute_arc_length(float t);
 
 private:
-    QColor backgroundColor;
-    QColor shapeColor;
-    ShapeType shape;
+    QColor _backgroundColor;
+    QColor _shapeColor;
+    ShapeType _shape;
 
+    // Curve computation members
+    float _intervalLength;
+    float _scale;
+    int _stepCount;
 };
 
 #endif // RENDERAREA_H
