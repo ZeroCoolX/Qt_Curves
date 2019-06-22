@@ -20,6 +20,9 @@ public:
     void setBackgroundColor(QColor color){this->_backgroundColor = color;}
     QColor getBackgroundColor() const {return this->_backgroundColor;}
 
+    void setShapeColor(QColor color){this->_shapeColor = color;}
+    QColor getShapeColor() const {return this->_shapeColor;}
+
     // Accessors
     void setShape(ShapeType shape){this->_shape = shape; this->on_shape_changed();}
     ShapeType getShape() const {return this->_shape;}
