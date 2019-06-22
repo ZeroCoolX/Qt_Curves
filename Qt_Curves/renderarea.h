@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QColor>
+#include <QPen>
 
 class RenderArea : public QWidget
 {
@@ -27,8 +28,8 @@ public:
     void setBackgroundColor(QColor color){this->_backgroundColor = color;}
     QColor getBackgroundColor() const {return this->_backgroundColor;}
 
-    void setShapeColor(QColor color){this->_shapeColor = color;}
-    QColor getShapeColor() const {return this->_shapeColor;}
+    void setShapeColor(QColor color){this->_drawPen.setColor(color);}
+    QColor getShapeColor() const {return this->_drawPen.color();}
 
     // Accessors
     void setShape(ShapeType shape){this->_shape = shape; this->on_shape_changed();}
@@ -66,8 +67,8 @@ private:
 
 private:
     QColor _backgroundColor;
-    QColor _shapeColor;
     ShapeType _shape;
+    QPen _drawPen;
 
     // Curve computation members
     float _intervalLength;

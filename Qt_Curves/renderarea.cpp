@@ -6,9 +6,10 @@
 RenderArea::RenderArea(QWidget *parent) :
     QWidget(parent),
     _backgroundColor(Qt::blue),
-    _shapeColor(Qt::white),
+    _drawPen(Qt::white),
     _shape(Astroid)
 {
+    this->_drawPen.setWidth(2);
     this->on_shape_changed();
 }
 
@@ -214,7 +215,7 @@ void RenderArea::paintEvent(QPaintEvent *event){
     // Change background render color
 
     painter.setBrush(_backgroundColor);
-    painter.setPen(_shapeColor);
+    painter.setPen(_drawPen);
 
     // Drawing area
     painter.drawRect(this->rect());
