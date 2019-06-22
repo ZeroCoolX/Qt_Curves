@@ -122,17 +122,29 @@ QPointF RenderArea::compute_line(float theta){
 
 void RenderArea::draw_shape(QPainter *painter){
     QPoint center {this->rect().center()};
+
+    QPointF prevPoint {compute_curve(0.f)};
+    QPoint prevPixel(
+                static_cast<int>(prevPoint.x() * _pixelScale + center.x()),
+                static_cast<int>(prevPoint.y() * _pixelScale + center.y())
+                );
+
+    QPoint pixel;
+    QPointF point;
+
     auto step {_intervalLength / _stepCount};
 
     for(auto theta{0.f}; theta < _intervalLength; theta += step){
         // compute shape's curve
-        QPointF point = compute_curve(theta);
+        point = compute_curve(theta);
+
         // calculate individual point
-        QPoint pixel;
         pixel.setX(static_cast<int>(point.x() * _pixelScale + center.x()));
         pixel.setY(static_cast<int>(point.y() * _pixelScale + center.y()));
-        // draw point
-        painter->drawPoint(pixel);
+
+        // draw line from last pixel and this pixel for a consistent render
+        painter->drawLine(pixel, prevPixel);
+        prevPixel = pixel;
     }
 }
 
