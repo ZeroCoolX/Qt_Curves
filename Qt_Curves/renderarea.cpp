@@ -23,28 +23,34 @@ QSize RenderArea::sizeHint() const {
 void RenderArea::on_shape_changed(){
     switch(_shape){
     case Astroid:
-        _scale = 40.f;
+        _pixelScale = 40.f;
         _intervalLength = 2.f * M_PI;
         _stepCount = 256;
         this->setBackgroundColor(Qt::red);
         break;
     case Cycloid:
-        _scale = 4;
+        _pixelScale = 4;
         _intervalLength = 6.f * M_PI;
         _stepCount = 128;
         this->setBackgroundColor(Qt::green);
         break;
     case HuygensCycloid:
-        _scale = 4;
+        _pixelScale = 4;
         _intervalLength = 4.f * M_PI;
         _stepCount = 256;
         this->setBackgroundColor(Qt::blue);
         break;
     case HypoCycloid:
-        _scale = 15;
+        _pixelScale = 15;
         _intervalLength = 2.f * M_PI;
         _stepCount = 256;
         this->setBackgroundColor(QColor(102, 0, 204)); // purple
+        break;
+    case Line:
+        _pixelScale = 100;
+        _intervalLength = 1.f;
+        _stepCount = 128;
+        //this->setBackgroundColor(QColor(102, 0, 204)); // purple
         break;
     default:
         break;
@@ -65,14 +71,16 @@ QPointF RenderArea::compute_curve(float theta){
     case HypoCycloid:
         return compute_hypo(theta);
         break;
+    case Line:
+        return compute_line(theta);
+        break;
     default:
         break;
     }
     return QPointF(0, 0);
 }
 
-// x(theta) = aCos^3(theta)
-// y(theta) = aSin^3(theta)
+
 // http://mathworld.wolfram.com/Astroid.html
 QPointF RenderArea::compute_astroid(float theta){
     auto cosCurve = cos(theta);
@@ -108,6 +116,10 @@ QPointF RenderArea::compute_hypo(float theta){
                 );
 }
 
+QPointF RenderArea::compute_line(float theta){
+    return QPointF(1.f - theta,1.f - theta);
+}
+
 void RenderArea::draw_shape(QPainter *painter){
     QPoint center {this->rect().center()};
     auto step {_intervalLength / _stepCount};
@@ -117,8 +129,8 @@ void RenderArea::draw_shape(QPainter *painter){
         QPointF point = compute_curve(theta);
         // calculate individual point
         QPoint pixel;
-        pixel.setX(static_cast<int>(point.x() * _scale + center.x()));
-        pixel.setY(static_cast<int>(point.y() * _scale + center.y()));
+        pixel.setX(static_cast<int>(point.x() * _pixelScale + center.x()));
+        pixel.setY(static_cast<int>(point.y() * _pixelScale + center.y()));
         // draw point
         painter->drawPoint(pixel);
     }
